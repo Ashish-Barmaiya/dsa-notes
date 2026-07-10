@@ -1,0 +1,116 @@
+# Asymptotic Notations
+
+Asymptotic Notations are mathematical tools used to describe how a function grows.
+
+There are three such notations:
+1. Big-$\Omega$ -> Lower Bound
+2. Big-$\Theta$ -> Tight Bound
+3. Big-$O$ -> Upper Bound
+
+Asymptotic notations describe the growth of mathematical functions. Since the time complexity of an algorithm can be expressed as a mathematical function T(n), asymptotic notations are used to describe how that function grows as the input size increases.
+
+# Understand the Concept
+
+- Let's take Linear Search algorithm as an example.
+
+## 1. Calculate the Time Function of a Algorithm
+
+We already know how to [calculate time function for an algorithm.](theory.md)
+
+However, there can be three scenarios for any algorithm. For linear search:
+
+1. Best Case Scenario -> $O(1)$
+
+2. Average Case Scenario -> $(n+1)/2$
+
+3. Worst Case Scenario -> $O(n)$
+
+***NOTE:*** We can derive time function for an algorithm for any case but getting the worst case is most practical as it gurantees that any given input, the algorithm will not take more than the calculated time.
+
+## 2. Describe the Time Function with Asymptotic Notations
+
+For linear search algorithm we have :
+
+$T(n) = n$
+
+Now we ask what are the limits of this particular funtion?
+
+In other words, how will this function grow/shrink with changing values of n?
+
+example:
+
+if $n = 10$
+
+worst case time function $= O(n) => O(10)$
+
+What if we increase the value of n -> maybe to 100 or 10000 or 10 billion
+
+If this happens, how will linear search algorithm behave? How will the time function change? Basically how will the algorithm scale.
+
+These are the questions that asymptotic notations answers.
+
+In our example of linear search, the algorithm will grow linearly.
+
+***Why?***
+
+This is where the degree of polynomial of the time function help us.
+Since a linear search algorithm takes 1 unit of time to search at 1 index, it's growth rate for the worst case will be linear (order of n).
+
+Hence, it will scale linearly.
+
+The worst-case time function of Linear Search is $Tworst(n)=n$
+
+The **tightest useful upper bound** of this function is $O(n)$
+
+***NOTE:*** Mathematically, the upper bound of Linear Search can be even omre, i.e., $O(n^2)$, $O(n^3)$, $O(2^n)$ etc.
+
+Then why do we use ($O(n)$) and not the others?
+
+**Because ($\mathbf{O(n)}$) is the smallest meaningful upper bound**
+
+Let's understand this better with an example
+
+## A Man on a journey
+
+Imagine a man plans to go from City A to City B. The distance is 100 km. He wants to figure out how long the journey will take so that he can prepare accordingly.
+
+There can be 3 scenarios here:
+
+1. **Best Case** -> Someone will give him a lift on their car and it will only take few hours for him to complete the journey.
+
+Even though this is the best case scenario, he cannot bet on it. There is no way to know he will get a lift for sure.
+
+2. **Average Case** -> He will find lift for some distance and he will cover the remaining distance by walking. 
+
+This can quite practical however he cant find the accurate time of journey with this scenario. He can't tell for what distance he will find lift. Hence, the calculation for this case is difficult.
+
+3. **Worst Case** -> He doesn't get lift at all and he have to walk all the way.
+
+He calculates the time for this case. He know that he can cover 10 km per day by walking. Therefore, he can complete his journey on 10 days at maximum even if he faces the worst case.
+
+Therefore, if he wants a guarantee that he has enough resources, he should prepare for the worst case. Preparing for the worst case scenario is most practical and wise decision.
+
+Now imagine the man gets ambitious.
+
+He wonders how long it will take for him to cover 10,000 kms by walking?
+
+1. 10,000 days?
+2. 5000 days?
+3. 2000 days?
+4. 1000 days?
+
+Since, he covers 10 km in a day, 100 km in 10 days, therefore he can cover 10,000 km in 1000 days. We can say that since the man travels linearly over a given period of time, his upper bound of travel will also be linear.
+
+However, all the other answers were not technically wrong. Maybe something may go wrong and it might take him 5000 days. But if he assume this, he will have to prepare for 5000 day journey allocation 5x resources.
+
+Thus, the most practical and efficient (while being safe) way to plan and assign resource is to calculate the **most reasonable upper limit**.
+
+## Back to Linear Search
+
+- We know that linear search takes 1 unit of time to search at any one index. Thus, to search at n index it will take $n$ time. [Time function = $n$] 
+
+- It's worst case will be $n$. [T-worst = $n$]
+
+- It's most meaningful upper bound or $Big-O$ will be $n$. [$O(n)$]
+
+- All other upper bounds greater that $n$ (i.e., $n^2$, $n^3$, $2^n$) are mathematically correct but not useful.
