@@ -385,4 +385,48 @@ for (i = 1; i < n; i = i * 2)
 for (i = n; i > 1; i = 1 / 10)
 ```
 
---- 
+---
+
+# Classes of Functions
+
+## Constant $O(1)$
+
+- Constant time complexity means the execution time does not depend on the input size (n) and can have any constant value (eg, 1, 2, 10, 20000).
+
+## Logarithmic $O(\log n)$
+
+- When the counter variable is multiplied or divided by any factor.
+- Base of log does not matter.
+
+## Linear $O(n)$
+
+- When the degree of the polynomial is 1.
+
+## Quadratic $O(n^2)$
+
+- When the degree of the polynomial is 1.
+
+## Cubic $O(n^3)$
+
+- When the degree of the polynomial is 3.
+
+## Exponential $O(2^n)$
+
+- Can be $3^n$, $4^n$ etc..
+
+---
+
+# Comparison of Functions
+
+<img src="../../assets/images/time-complexity-graph.png" alt="time-complexity-graph-img" width="500">
+
+$
+\Large 
+\begin{array}{l}
+1 < \log n < \sqrt{n} < n < n \log n < n^2 < n^3 . . . < 2^n . . . < n^n
+\end{array}
+$
+
+-> For smaller values of $n$, the value of $2^n$ can be smaller than or equal to $n^k$, but as tge value of $n$ increases, value of $2^n$ increases exponentially.
+
+---
