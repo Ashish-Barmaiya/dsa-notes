@@ -257,13 +257,13 @@ Let's trace this:
 
 $$
 \begin{array}{l}
-\text{We get, } p = \frac{k(k + 1)}{2} \\\\
-\text{Now, let's assume } p > n \\\\
-\text{Why? } \rightarrow \text{ Because the loop will terminate when } p \ge n \\\\
-\text{We know that } p = \frac{k(k + 1)}{2} \\\\
-\text{Therefore, } \frac{k(k + 1)}{2} > n \\\\
-k^2 > n \\\\
-k > \sqrt{n}
+&\text{We get, } p = \frac{k(k + 1)}{2} \\\\
+&\text{Now, let's assume } p > n \\\\
+&\text{Why? } \rightarrow \text{ Because the loop will terminate when } p \ge n \\\\
+&\text{We know that } p = \frac{k(k + 1)}{2} \\\\
+&\text{Therefore, } \frac{k(k + 1)}{2} > n \\\\
+&k^2 > n \\\\
+&k > \sqrt{n}
 \end{array}
 $$
 
@@ -420,12 +420,7 @@ for (i = n; i > 1; i = 1 / 10)
 
 <img src="../../assets/images/time-complexity-graph.png" alt="time-complexity-graph-img" width="500">
 
-$
-\Large 
-\begin{array}{l}
-1 < \log n < \sqrt{n} < n < n \log n < n^2 < n^3 . . . < 2^n . . . < n^n
-\end{array}
-$
+$\Large 1 < \log n < \sqrt{n} < n < n \log n < n^2 < n^3 . . . < 2^n . . . < n^n$
 
 -> For smaller values of $n$, the value of $2^n$ can be smaller than or equal to $n^k$, but as tge value of $n$ increases, value of $2^n$ increases exponentially.
 
