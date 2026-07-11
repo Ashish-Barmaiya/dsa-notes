@@ -3,9 +3,9 @@
 Asymptotic Notations are mathematical tools used to describe how a function grows.
 
 There are three such notations:
-1. Big-$\Omega$ -> Lower Bound
-2. Big-$\Theta$ -> Tight Bound
-3. Big-$O$ -> Upper Bound
+1. $Big-\Omega$ -> Lower Bound
+2. $Big-\Theta$ -> Tight Bound
+3. $Big-O$ -> Upper Bound
 
 Asymptotic notations describe the growth of mathematical functions. Since the time complexity of an algorithm can be expressed as a mathematical function T(n), asymptotic notations are used to describe how that function grows as the input size increases.
 
@@ -119,7 +119,7 @@ Now that we understood the underlying concept, let's understand the three notati
 
 ---
 
-# Big - O Notation (Upper Bound)
+# $Big - O$ Notation (Upper Bound)
 
 We know that the man in the worst case scenario can travel at a speed of 10 km/day.
 
@@ -143,7 +143,7 @@ or $O(n)$
 
 $\rightarrow$ Our man can travel faster than 10km/day (if he get a lift etc). Which means this function can grow with a faster growth rate than linear (like $n^2$, $n^3$). But we want **most meaningful** or the **tightest upper bound**. 
 
-# Big - Omega Notation (Lower Bound)
+# $Big - \Omega$  Notation (Lower Bound)
 
 For $Big-O$ we asked the most meaningful fastest possible growth rate of a function?
 
@@ -169,7 +169,7 @@ or $\Omega(n)$
 
 ---
 
-# Big - Theta (Tight Bound)
+# $Big - \Theta$ Notation (Tight Bound)
 
 We know that our function cannot grow faster than linear and it cannot grow slower than linear.
 
