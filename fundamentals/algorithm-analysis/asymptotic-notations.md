@@ -99,7 +99,7 @@ He wonders how long it will take for him to cover 10,000 kms by walking?
 3. 2000 days?
 4. 1000 days?
 
-Since, he covers 10 km in a day, 100 km in 10 days, therefore he can cover 10,000 km in 1000 days. We can say that since the man travels linearly over a given period of time, his upper bound of travel will also be linear.
+Since, he covers 10 km in a day, 100 km in 10 days, therefore he can cover 10,000 km in 1000 days. We can say that since the man travels linearly over a given period of time, the time required to complete the journey grows linearly with the distance.
 
 However, all the other answers were not technically wrong. Maybe something may go wrong and it might take him 5000 days. But if he assume this, he will have to prepare for 5000 day journey allocation 5x resources.
 
@@ -114,3 +114,97 @@ Thus, the most practical and efficient (while being safe) way to plan and assign
 - It's most meaningful upper bound or $Big-O$ will be $n$. [$O(n)$]
 
 - All other upper bounds greater that $n$ (i.e., $n^2$, $n^3$, $2^n$) are mathematically correct but not useful.
+
+Now that we understood the underlying concept, let's understand the three notations using this example.
+
+---
+
+# Big - O Notation (Upper Bound)
+
+We know that the man in the worst case scenario can travel at a speed of 10 km/day.
+
+So, for $100 \text{km} \rightarrow 10 \text{days}$
+
+$1000 \text{km} \rightarrow 100 \text{days}$
+
+$10000 \text{km} \rightarrow 1000 \text{days}$
+
+Notice that time grows linearly with distance.
+
+And that is the question what $Big-O$ answers $\rightarrow$ ***What is the most meaningful fastest possible growth rate of a function?***
+
+For this function, it is **linear**. 
+
+So, $Big-O$ of this function is $n$
+
+or $O(n)$
+
+***NOTE:*** $Big-O$ defines the **most meaningful** upper bound of a function, even though it mathematically it can be more.
+
+$\rightarrow$ Our man can travel faster than 10km/day (if he get a lift etc). Which means this function can grow with a faster growth rate than linear (like $n^2$, $n^3$). But we want **most meaningful** or the **tightest upper bound**. 
+
+# Big - Omega Notation (Lower Bound)
+
+For $Big-O$ we asked the most meaningful fastest possible growth rate of a function?
+
+For $Big-\Omega$ we ask:
+
+$\rightarrow$ ***What is the most meaningful slowest possible growth rate of a function?***
+
+$\rightarrow$ ***Is there a limit below which this function can never go? (The Lower Bound)***
+
+In our example, we know that if the journey increase a $x$ the time taken also increases by $x$ - linear relationship.
+
+If the journey increase by 100 km, it will take the man 10 days to cover it as he walks 10km/day. He cannot magically cover 50 km in 1 day.
+
+Thus, the time must increase proportionally with the distance.
+
+This is what $Big-\Omega$ says $\rightarrow$ ***It can never take less than linear time (asymptotically) for a function to grow***.
+
+For our example, the function can never grow slower than **linear**.
+
+So, $Big-\Omega$ of this function is $n$
+
+or $\Omega(n)$
+
+---
+
+# Big - Theta (Tight Bound)
+
+We know that our function cannot grow faster than linear and it cannot grow slower than linear.
+
+Therefore, The only possibility left is that it grows exactly like a linear function.
+
+This is what $Big-\Theta$ answers:
+
+$\rightarrow \text{What is the exact asymptotic growth of a function?}$
+
+$\rightarrow \text{It is the tight bound of a function.}$
+
+It always lies between the lower bound and the upper bound.
+
+For our example, the function can never grow slower than linear and the function can never grow faster than linear.
+
+Therefore, it will always grow **linearly**.
+
+So, $Big-\Theta$ of this function is $n$
+
+or $\Theta(n)$
+
+---
+
+# Things to Remember
+
+### 1. Every algorithm has one or more time functions depending on the case.
+
+### 2. Asymptotic notations describe time functions, not algorithms directly.
+
+### 3. $Big-O \rightarrow$ Upper Bound.
+
+### 4. $Big-\Omega \rightarrow$ Lower Bound.
+
+### 5. $Big-\Theta \rightarrow$ Exact asymptotic growth.
+
+### 6. In interview problems, after deriving the time function, the tight O, Ω, and Θ almost always coincide. Therefore, everyone simply reports the tight Big O by convention.
+
+---
