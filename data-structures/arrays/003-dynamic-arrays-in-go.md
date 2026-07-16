@@ -1,49 +1,3 @@
-# Static Array in Go
-
-- An array is a fundamental and linear data structure that stores items at contiguous locations.
-
-- In Go, an array type definition specifies a length and an element type. For example, the type [4]int represents an array of four integers.
-
-- An array’s size is fixed; its **length is part of its type** because an arrays size is fixed at compile-time. ([4]int and [5]int are distinct, incompatible types).
-
-```go
-var a [4]int
-
-// This creates an array 'a' with size 4, type int
-// Array is zero-filled
-```
-- **Fixed Size:** Just like in C/C++, the size of a Go array is fixed at compile-time and forms an inseparable part of its type system (e.g., [5]int and [10]int are distinct, incompatible types).
-
-- **No Variable Sizing:** You cannot use a runtime variable to declare an array's size. It must be a compile-time constant.
-
-- **Pass-by-Value:** Go’s arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents (pass by value). Changes inside the function do not affect the original array.
-
-- To avoid the copy you could pass a pointer to the array, but then that’s a pointer to an array, not an array (pass by reference).
-
-- An array litereal can be specified like this:
-
-```go
-b := [2]string{"Penn", "Teller"}
-```
-
-- Or we can have the compiler count the array elements:
-
-```go
-b := [...]string{"Penn", "Teller"}
-```
-
-- In both cases, the type of b is [2]string.
-
-## Where will it be created?
-
-- In C, if we declare an array inside a function, the memory for this array will be created inside the stack.
-
-- However, in Go we don't get to explicitly choose if a variable goes on the stack or the heap.
-
-- **Escape Anaylysis:** The Go compiler performs escape analysis at compile-time. If the compiler can prove the array does not "escape" the function (e.g., you don't return a pointer to it or pass it to a goroutine), it allocates it on the stack. If it escapes, the compiler silently moves it to the heap.
-
----
-
 # Dynamic Array in Go (Slice)
 
 - Slices wrap arrays to give a more general, powerful, and convenient interface to sequences of data.
@@ -178,3 +132,152 @@ s = processData(s)
 // ensuring main's underlying array remains untouched.
 modifySlice(slice_header_1[0:5:5])
 ```
+
+---
+
+# Slicing
+
+- A slice can also be formed by **slicing** an existing slice or array.
+
+- Slicing is done by specifying a half-open range with two indices separated by a colon:
+
+```go
+newSlice := original[low : high] // low is the start index (inclusive), high is end index (exclusive)
+```
+
+- For Example:
+
+```go
+slice := []int {0, 1, 2, 3, 4, 5}
+
+newSlice := slice[1:4] // 
+
+// newSlice = [1, 2, 3]
+```
+
+- The start and end indices of a slice expression are optional; they default to zero and the slice’s length respectively:
+
+```go
+newSlice := slice[:2] // slicing starts from index 0 to index 1 (end index - 1)
+
+// newSlice = [1, 2]
+```
+
+```go
+newSlice := slice[2:] // slicing starts from index 2 to the nth index
+
+// newSlice = [2, 3, 4, 5]
+```
+
+```go
+newSlice := slice[:] // slicing starts from index 0 to the nth index
+
+// newSlice = [0, 1, 2, 3, 4, 5]
+
+// basically, slice[:] = slice
+```
+
+## The Mechanics of Re-Slicing
+
+### What Actually Happens During Re-Slicing?
+
+When we re-slice an existing slice using the syntax subSlice := mainSlice[low:high], Go does not allocate a new array, nor does it copy any data.
+
+Instead, Go constructs a new Slice Header on the stack. The fields of this new header are mathematically calculated based on the original header:
+
+- Data (New Pointer): Shifted forward by the low index.
+
+- Len (Length): Calculated as high - low.
+
+- Cap (Capacity): Automatically calculated as OldCapacity - low. It inherits the remaining capacity of the original underlying array.
+
+### Edge Cases of Re-Slicing
+
+#### Edge Case A: The "Borrowing Capacity" Overwrite Risk
+
+When we do not explicitly define a capacity during a re-slice, the new slice borrows the full remaining capacity of the parent array. This creates a risk of silent data destruction.
+
+```go
+func main() {
+    original := []int{10, 20, 30, 40, 50} // Len: 5, Cap: 5
+    
+    // Create a sub-slice of the first two elements
+    sub := original[0:2] // Len: 2, Cap: 5 (Borrows remaining capacity!)
+    
+    // We think 'sub' is isolated, so we append to it
+    sub = append(sub, 999)
+    
+    fmt.Println("Sub:", sub)            // [10, 20, 999]
+    fmt.Println("Original:", original)  // [10, 20, 999, 40, 50] <-- SILENT CORRUPTION
+}
+```
+
+This happens because sub had a borrowed capacity of 5, append realized it had room to grow in place. It mathematically calculated Data + Len (index 2) and blindly overwrote the value 30 in the original array with 999.
+
+#### Edge Case B: The Hidden Memory Leak (Holding the Entire Array)
+
+Because a re-slice points directly to the original underlying array, that entire underlying array cannot be garbage collected as long as the sub-slice is alive.
+
+Imagine we read a large log file or database record into memory, extract a tiny piece of information, and keep only that piece:
+
+```go
+func getSmallToken() []byte {
+    // Allocates a large 50MB array in the heap
+    largeLog := readLargeFile() 
+    
+    // Re-slice a tiny 4-byte token from the front
+    token := largeLog[0:4] 
+    
+    return token // largeLog goes out of scope, BUT...
+}
+```
+
+We think we freed 50MB of memory and kept only 4 bytes. In reality, because token's Data pointer still hooks into the base of that large heap array, the Go Garbage Collector cannot free a single byte of that 50MB block. If we store this token in a long-lived global map, we have introduced a silent memory leak.
+
+### How to Handle and Prevent These Issues
+
+#### 1. Solution A: Three-Index Slicing (Fixes Overwrite Risks)
+
+To stop a sub-slice from borrowing the parent’s capacity, use the three-index syntax: slice[low:high:max]. The capacity of the new slice becomes max - low.
+
+```go
+original := []int{10, 20, 30, 40, 50}
+
+// Force Capacity to match Length exactly: max = 2
+sub := original[0:2:2] // Len: 2, Cap: 2 (Cannot borrow extra space!)
+
+sub = append(sub, 999) // Cap is full! Forces a safe O(n) reallocation.
+
+fmt.Println("Original:", original) // [10, 20, 30, 40, 50] <-- SAFE!
+```
+
+#### 2. Solution B: Built-in copy() (Fixes Memory Leaks)
+
+To completely detach a sub-slice from a large parent array, we must allocate a brand-new, isolated slice and use the built-in copy() function to move the data.
+
+```go
+func getSmallToken() []byte {
+    largeLog := readLargeFile() // 50MB
+    
+    // 1. Allocate a completely independent 4-byte slice
+    token := make([]byte, 4)
+    
+    // 2. Copy the data from the large array into the small one
+    copy(token, largeLog[0:4])
+    
+    return token 
+    // Now, largeLog has zero references. 
+    // The GC will successfully wipe the 50MB array from memory!
+}
+```
+
+## Idiomatic Rules of Re-Slicing
+
+1. **Slices are Shared State by Default:** Always assume that any re-slice (a[x:y]) shares the same memory as the parent. If we mutate elements in one, we mutate the other.
+
+2. **The Three-Index Mandate:** Never pass a re-sliced view into an untrusted function or concurrent goroutine without using three-index slicing (a[low:high:high]) to limit its capacity. If we don't limit capacity, that function can corrupt our local data via append.
+
+3. **The Lifespan Rule:** If a tiny sub-slice needs to live longer than the giant slice it came from, do not re-slice. We must explicitly make() a new slice and copy() the data to free the parent array for the Garbage Collector.
+
+---
+
